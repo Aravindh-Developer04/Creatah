@@ -364,6 +364,10 @@ export default function CareersPage({ onNavigateHome, onNavigateToProposal }) {
               <div className="flex flex-wrap items-center gap-3 pt-2">
                 <a
                   href="#open-roles"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document.getElementById('open-roles')?.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-bold text-xs sm:text-sm shadow-md shadow-blue-500/20 hover:shadow-lg hover:shadow-blue-500/30 transition transform hover:-translate-y-0.5 cursor-pointer"
                 >
                   <Briefcase className="w-4 h-4" />

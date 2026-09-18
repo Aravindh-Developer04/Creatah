@@ -27,7 +27,7 @@ export default function Footer({ onNavigatePage }) {
           <div className="lg:col-span-6 space-y-3">
             <div className="flex items-center">
               <a
-                href="#"
+                href="/"
                 onClick={(e) => handleNav(e, 'home')}
                 className="inline-block transition hover:opacity-90 cursor-pointer"
                 aria-label="Creatah Home"
@@ -69,13 +69,13 @@ export default function Footer({ onNavigatePage }) {
               Quick Links
             </h4>
             <ul className="space-y-2 sm:space-y-2.5">
-              <li><a href="#" onClick={(e) => handleNav(e, 'home')} className="hover:text-cyan-400 transition py-0.5 inline-block">Home</a></li>
-              <li><a href="#about-us" onClick={(e) => handleNav(e, 'about')} className="hover:text-cyan-400 transition py-0.5 inline-block">About Us</a></li>
-              <li><a href="#careers" onClick={(e) => handleNav(e, 'careers')} className="hover:text-cyan-400 transition py-0.5 inline-block">Careers <span className="text-[10px] text-emerald-400 font-bold ml-1">Hiring</span></a></li>
-              <li><a href="#industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Industries</a></li>
-              <li><a href="#process" onClick={(e) => handleNav(e, 'process')} className="hover:text-cyan-400 transition py-0.5 inline-block">Engineering Process</a></li>
-              <li><a href="#contact-us" onClick={(e) => handleNav(e, 'contact')} className="hover:text-cyan-400 transition py-0.5 inline-block">Contact Us</a></li>
-              <li><a href="#proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Request a Proposal</a></li>
+              <li><a href="/" onClick={(e) => handleNav(e, 'home')} className="hover:text-cyan-400 transition py-0.5 inline-block">Home</a></li>
+              <li><a href="/about-us" onClick={(e) => handleNav(e, 'about')} className="hover:text-cyan-400 transition py-0.5 inline-block">About Us</a></li>
+              <li><a href="/careers" onClick={(e) => handleNav(e, 'careers')} className="hover:text-cyan-400 transition py-0.5 inline-block">Careers <span className="text-[10px] text-emerald-400 font-bold ml-1">Hiring</span></a></li>
+              <li><a href="/industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Industries</a></li>
+              <li><a href="/process" onClick={(e) => handleNav(e, 'process')} className="hover:text-cyan-400 transition py-0.5 inline-block">Engineering Process</a></li>
+              <li><a href="/contact-us" onClick={(e) => handleNav(e, 'contact')} className="hover:text-cyan-400 transition py-0.5 inline-block">Contact Us</a></li>
+              <li><a href="/request-a-proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Request a Proposal</a></li>
             </ul>
           </div>
 
@@ -99,11 +99,11 @@ export default function Footer({ onNavigatePage }) {
               Hire Developers
             </h4>
             <ul className="space-y-2 sm:space-y-2.5">
-              <li><a href="#proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Mobile App Developers</a></li>
-              <li><a href="#proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Backend Node / Python</a></li>
-              <li><a href="#proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">UI/UX Product Designers</a></li>
-              <li><a href="#proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Full Stack Engineers</a></li>
-              <li><a href="#proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">WordPress & CMS Developers</a></li>
+              <li><a href="/request-a-proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Mobile App Developers</a></li>
+              <li><a href="/request-a-proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Backend Node / Python</a></li>
+              <li><a href="/request-a-proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">UI/UX Product Designers</a></li>
+              <li><a href="/request-a-proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">Full Stack Engineers</a></li>
+              <li><a href="/request-a-proposal" onClick={(e) => handleNav(e, 'proposal')} className="hover:text-cyan-400 transition py-0.5 inline-block">WordPress & CMS Developers</a></li>
             </ul>
           </div>
 
@@ -113,11 +113,11 @@ export default function Footer({ onNavigatePage }) {
               Industries We Serve
             </h4>
             <ul className="space-y-2 sm:space-y-2.5">
-              <li><a href="#industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Healthcare & Diagnostics</a></li>
-              <li><a href="#industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Logistics & Supply Chain</a></li>
-              <li><a href="#industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Retail & Ecommerce</a></li>
-              <li><a href="#industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Real Estate & Construction</a></li>
-              <li><a href="#industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Fintech & Banking</a></li>
+              <li><a href="/industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Healthcare & Diagnostics</a></li>
+              <li><a href="/industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Logistics & Supply Chain</a></li>
+              <li><a href="/industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Retail & Ecommerce</a></li>
+              <li><a href="/industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Real Estate & Construction</a></li>
+              <li><a href="/industries" onClick={(e) => handleNav(e, 'industries')} className="hover:text-cyan-400 transition py-0.5 inline-block">Fintech & Banking</a></li>
             </ul>
           </div>
 

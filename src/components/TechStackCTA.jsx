@@ -39,7 +39,11 @@ export default function TechStackCTA({ onOpenEstimate }) {
           <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 sm:gap-4 pt-2">
             <a
               href="#contactForm"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl shadow-xl shadow-blue-600/30 transition-all hover:-translate-y-0.5 text-sm sm:text-base min-h-[44px]"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('contactForm')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold px-6 sm:px-8 py-3.5 sm:py-4 rounded-xl shadow-xl shadow-blue-600/30 transition-all hover:-translate-y-0.5 text-sm sm:text-base min-h-[44px] cursor-pointer"
             >
               <span>Get Started Today</span>
               <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />

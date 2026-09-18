@@ -5,7 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "node node_modules/vite/bin/vite.js build",
+    "build:client": "node node_modules/vite/bin/vite.js build",
+    "build:server": "node node_modules/vite/bin/vite.js build --ssr src/entry-server.jsx --outDir dist-ssr",
+    "prerender": "node prerender.js",
+    "build": "npm run build:client && npm run build:server && npm run prerender",
     "preview": "vite preview"
   },
   "dependencies": {

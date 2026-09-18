@@ -19,22 +19,33 @@ import IndustriesPage from './pages/IndustriesPage';
 import CareersPage from './pages/CareersPage';
 import ProcessPage from './pages/ProcessPage';
 import ContactUsPage from './pages/ContactUsPage';
+import { getSeoForUrl } from './data/seoData';
 
-function getRouteFromLocation() {
+function getRouteFromLocation(url) {
+  if (url) {
+    const cleanUrl = url.toLowerCase();
+    if (cleanUrl.includes('about')) return 'about';
+    if (cleanUrl.includes('career')) return 'careers';
+    if (cleanUrl.includes('industr')) return 'industries';
+    if (cleanUrl.includes('process')) return 'process';
+    if (cleanUrl.includes('contact')) return 'contact';
+    if (cleanUrl.includes('proposal') || cleanUrl.includes('consult')) return 'proposal';
+    return 'home';
+  }
   if (typeof window === 'undefined') return 'home';
-  const hash = window.location.hash.toLowerCase();
   const path = window.location.pathname.toLowerCase();
+  const hash = window.location.hash.toLowerCase();
 
-  if (hash.includes('about') || path.includes('about')) return 'about';
-  if (hash.includes('career') || path.includes('career')) return 'careers';
-  if (hash.includes('industr') || path.includes('industr')) return 'industries';
-  if (hash.includes('process') || path.includes('process')) return 'process';
-  if (hash.includes('contact') || path.includes('contact')) return 'contact';
+  if (path.includes('about') || hash.includes('about')) return 'about';
+  if (path.includes('career') || hash.includes('career')) return 'careers';
+  if (path.includes('industr') || hash.includes('industr')) return 'industries';
+  if (path.includes('process') || hash.includes('process')) return 'process';
+  if (path.includes('contact') || hash.includes('contact')) return 'contact';
   if (
-    hash.includes('proposal') ||
-    hash.includes('consult') ||
     path.includes('proposal') ||
-    path.includes('consult')
+    path.includes('consult') ||
+    hash.includes('proposal') ||
+    hash.includes('consult')
   ) {
     return 'proposal';
   }
@@ -42,35 +53,88 @@ function getRouteFromLocation() {
   return 'home';
 }
 
-export default function App() {
-  const [currentPage, setCurrentPage] = useState(() => getRouteFromLocation());
+function getPathForPage(page) {
+  switch (page) {
+    case 'about':
+      return '/about-us';
+    case 'careers':
+    case 'career':
+      return '/careers';
+    case 'industries':
+      return '/industries';
+    case 'process':
+      return '/process';
+    case 'contact':
+      return '/contact-us';
+    case 'proposal':
+      return '/request-a-proposal';
+    case 'home':
+    default:
+      return '/';
+  }
+}
+
+export default function App({ initialUrl }) {
+  const [currentPage, setCurrentPage] = useState(() => getRouteFromLocation(initialUrl));
   const [estimateModalOpen, setEstimateModalOpen] = useState(false);
 
   useEffect(() => {
+    // If the browser currently has a hash (like #about-us), immediately strip it and replace with clean URL
+    if (window.location.hash) {
+      const initialPage = getRouteFromLocation();
+      const cleanPath = getPathForPage(initialPage);
+      window.history.replaceState(null, '', cleanPath);
+    }
+
     const handlePopState = () => {
+      if (window.location.hash) {
+        window.history.replaceState(null, '', window.location.pathname || '/');
+      }
       setCurrentPage(getRouteFromLocation());
     };
+
     window.addEventListener('popstate', handlePopState);
-    window.addEventListener('hashchange', handlePopState);
     return () => {
       window.removeEventListener('popstate', handlePopState);
-      window.removeEventListener('hashchange', handlePopState);
     };
+  }, []);
+
+  // Global listener to prevent '#' from appearing in browser URL for any anchor links
+  useEffect(() => {
+    const handleGlobalClick = (e) => {
+      const anchor = e.target.closest('a');
+      if (!anchor) return;
+
+      const href = anchor.getAttribute('href');
+      if (!href) return;
+
+      if (href === '#') {
+        e.preventDefault();
+        return;
+      }
+
+      if (href.startsWith('#')) {
+        e.preventDefault();
+        const targetEl = document.querySelector(href);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+        if (window.location.hash) {
+          window.history.replaceState(null, '', window.location.pathname || '/');
+        }
+      }
+    };
+
+    document.addEventListener('click', handleGlobalClick);
+    return () => document.removeEventListener('click', handleGlobalClick);
   }, []);
 
   const navigateToPage = (page, anchor = '') => {
     setCurrentPage(page);
-    let targetHash = '';
-    if (page === 'about') targetHash = '#about-us';
-    else if (page === 'careers' || page === 'career') targetHash = '#careers';
-    else if (page === 'industries') targetHash = '#industries';
-    else if (page === 'process') targetHash = '#process';
-    else if (page === 'contact') targetHash = '#contact-us';
-    else if (page === 'proposal') targetHash = '#request-a-proposal';
-    else if (page === 'home') targetHash = anchor || '#';
+    const targetPath = getPathForPage(page);
 
-    if (window.location.hash !== targetHash) {
-      window.history.pushState(null, '', targetHash);
+    if (window.location.pathname !== targetPath || window.location.hash) {
+      window.history.pushState(null, '', targetPath);
     }
 
     if (anchor && page === 'home') {
@@ -84,6 +148,36 @@ export default function App() {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
+
+  // Synchronize document title and primary meta tags on client route change
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+    const currentPath = getPathForPage(currentPage);
+    const seo = getSeoForUrl(currentPath);
+    if (seo) {
+      document.title = seo.title;
+      const descMeta = document.querySelector('meta[name="description"]');
+      if (descMeta) descMeta.setAttribute('content', seo.description);
+      const titleMeta = document.querySelector('meta[name="title"]');
+      if (titleMeta) titleMeta.setAttribute('content', seo.title);
+      const kwMeta = document.querySelector('meta[name="keywords"]');
+      if (kwMeta) kwMeta.setAttribute('content', seo.keywords);
+      const canonical = document.querySelector('link[rel="canonical"]');
+      if (canonical) canonical.setAttribute('href', seo.canonical);
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute('content', seo.title);
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute('content', seo.description);
+      const ogUrl = document.querySelector('meta[property="og:url"]');
+      if (ogUrl) ogUrl.setAttribute('content', seo.canonical);
+      const twTitle = document.querySelector('meta[name="twitter:title"]');
+      if (twTitle) twTitle.setAttribute('content', seo.title);
+      const twDesc = document.querySelector('meta[name="twitter:description"]');
+      if (twDesc) twDesc.setAttribute('content', seo.description);
+      const twUrl = document.querySelector('meta[name="twitter:url"]');
+      if (twUrl) twUrl.setAttribute('content', seo.canonical);
+    }
+  }, [currentPage]);
 
   const isDarkPage = currentPage === 'proposal';
 
@@ -108,6 +202,8 @@ export default function App() {
           <AboutUsPage
             onNavigateHome={() => navigateToPage('home')}
             onNavigateToProposal={() => navigateToPage('proposal')}
+            onNavigateContact={() => navigateToPage('contact')}
+            onNavigatePage={navigateToPage}
           />
         )}
 
@@ -115,6 +211,7 @@ export default function App() {
           <CareersPage
             onNavigateHome={() => navigateToPage('home')}
             onNavigateToProposal={() => navigateToPage('proposal')}
+            onNavigatePage={navigateToPage}
           />
         )}
 
@@ -122,6 +219,7 @@ export default function App() {
           <IndustriesPage
             onNavigateHome={() => navigateToPage('home')}
             onNavigateToProposal={() => navigateToPage('proposal')}
+            onNavigatePage={navigateToPage}
           />
         )}
 
@@ -129,6 +227,7 @@ export default function App() {
           <ProcessPage
             onNavigateHome={() => navigateToPage('home')}
             onNavigateToProposal={() => navigateToPage('proposal')}
+            onNavigatePage={navigateToPage}
           />
         )}
 
@@ -136,6 +235,7 @@ export default function App() {
           <ContactUsPage
             onNavigateHome={() => navigateToPage('home')}
             onNavigateToProposal={() => navigateToPage('proposal')}
+            onNavigatePage={navigateToPage}
           />
         )}
 

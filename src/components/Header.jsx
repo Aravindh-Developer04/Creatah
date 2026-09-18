@@ -71,7 +71,7 @@ export default function Header({
           
           {/* Creatah Official Brand Logo */}
           <a
-            href="#"
+            href="/"
             onClick={(e) => handleNav(e, 'home')}
             className="flex items-center group cursor-pointer"
           >
@@ -85,7 +85,7 @@ export default function Header({
           {/* Desktop Navigation Links */}
           <nav className="hidden lg:flex items-center gap-8">
             <a
-              href="#"
+              href="/"
               onClick={(e) => handleNav(e, 'home')}
               className={`text-sm font-semibold transition cursor-pointer relative py-1 ${
                 currentPage === 'home'
@@ -96,7 +96,7 @@ export default function Header({
               Home
             </a>
             <a
-              href="#about-us"
+              href="/about-us"
               onClick={(e) => handleNav(e, 'about')}
               className={`text-sm font-semibold transition cursor-pointer relative py-1 ${
                 currentPage === 'about'
@@ -273,7 +273,7 @@ export default function Header({
             </div>
 
             <a
-              href="#careers"
+              href="/careers"
               onClick={(e) => handleNav(e, 'careers')}
               className={`text-sm font-semibold transition cursor-pointer relative py-1 flex items-center gap-1.5 ${
                 currentPage === 'careers'
@@ -287,7 +287,7 @@ export default function Header({
               </span>
             </a>
             <a
-              href="#process"
+              href="/process"
               onClick={(e) => handleNav(e, 'process')}
               className={`text-sm font-semibold transition cursor-pointer relative py-1 ${
                 currentPage === 'process'
@@ -298,7 +298,7 @@ export default function Header({
               Process
             </a>
             <a
-              href="#contact-us"
+              href="/contact-us"
               onClick={(e) => handleNav(e, 'contact')}
               className={`text-sm font-semibold transition cursor-pointer relative py-1 ${
                 currentPage === 'contact'
@@ -347,7 +347,7 @@ export default function Header({
       {mobileMenuOpen && (
         <div className="lg:hidden bg-[#080c18]/98 backdrop-blur-2xl border-b border-white/10 px-4 pt-3 pb-8 space-y-2 animate-fadeIn text-slate-200 max-h-[calc(100dvh-4.5rem)] overflow-y-auto shadow-2xl">
           <a
-            href="#"
+            href="/"
             onClick={(e) => handleNav(e, 'home')}
             className={`block px-3.5 py-2.5 rounded-xl font-semibold text-sm transition ${
               currentPage === 'home'
@@ -358,7 +358,7 @@ export default function Header({
             Home
           </a>
           <a
-            href="#about-us"
+            href="/about-us"
             onClick={(e) => handleNav(e, 'about')}
             className={`block px-3.5 py-2.5 rounded-xl font-semibold text-sm transition ${
               currentPage === 'about'
@@ -416,7 +416,7 @@ export default function Header({
           </div>
 
           <a
-            href="#careers"
+            href="/careers"
             onClick={(e) => handleNav(e, 'careers')}
             className={`flex items-center justify-between px-3.5 py-2.5 rounded-xl font-semibold text-sm transition ${
               currentPage === 'careers'
@@ -430,7 +430,7 @@ export default function Header({
             </span>
           </a>
           <a
-            href="#process"
+            href="/process"
             onClick={(e) => handleNav(e, 'process')}
             className={`block px-3.5 py-2.5 rounded-xl font-semibold text-sm transition ${
               currentPage === 'process'
@@ -441,7 +441,7 @@ export default function Header({
             Development Process
           </a>
           <a
-            href="#contact-us"
+            href="/contact-us"
             onClick={(e) => handleNav(e, 'contact')}
             className={`block px-3.5 py-2.5 rounded-xl font-semibold text-sm transition ${
               currentPage === 'contact'

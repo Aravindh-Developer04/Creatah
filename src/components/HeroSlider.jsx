@@ -155,7 +155,11 @@ export default function HeroSlider({ onOpenEstimate }) {
 
             <a
               href="#why-choose"
-              className="inline-flex items-center justify-center gap-2 bg-[#080c18]/90 hover:bg-[#131b30] border border-white/15 text-slate-200 font-semibold px-4 sm:px-4.5 py-2.5 rounded-xl hover:border-cyan-500/40 transition-all text-xs sm:text-sm backdrop-blur-md shadow-md"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById('why-choose')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="inline-flex items-center justify-center gap-2 bg-[#080c18]/90 hover:bg-[#131b30] border border-white/15 text-slate-200 font-semibold px-4 sm:px-4.5 py-2.5 rounded-xl hover:border-cyan-500/40 transition-all text-xs sm:text-sm backdrop-blur-md shadow-md cursor-pointer"
             >
               <span>Learn More</span>
               <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />

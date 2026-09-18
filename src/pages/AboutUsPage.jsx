@@ -124,7 +124,7 @@ const TESTIMONIALS = [
   },
 ];
 
-export default function AboutUsPage({ onNavigateHome, onNavigateToProposal }) {
+export default function AboutUsPage({ onNavigateHome, onNavigateToProposal, onNavigateContact, onNavigatePage }) {
   return (
     <div className="pt-24 sm:pt-28 pb-20 bg-[#f8fafc] text-slate-900 min-h-screen">
       
@@ -171,10 +171,11 @@ export default function AboutUsPage({ onNavigateHome, onNavigateToProposal }) {
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
               <a
-                href="#contact-us"
+                href="/contact-us"
                 onClick={(e) => {
                   e.preventDefault();
-                  window.location.hash = '#contact-us';
+                  if (onNavigateContact) onNavigateContact();
+                  else if (onNavigatePage) onNavigatePage('contact');
                 }}
                 className="inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 border border-slate-200 text-slate-700 font-semibold px-5 py-2.5 rounded-xl transition text-xs sm:text-sm shadow-sm"
               >
