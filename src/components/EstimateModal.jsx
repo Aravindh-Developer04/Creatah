@@ -13,6 +13,7 @@ import {
   Building2,
   Check,
 } from 'lucide-react';
+import { submitLead } from '../services/leadService';
 import { COUNTRY_CODES } from '../data/countryCodes';
 
 const SERVICES = [
@@ -86,13 +87,35 @@ export default function EstimateModal({ isOpen, onClose }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (phone && phone.length !== selectedCountry.digits) {
       setPhoneError(`Enter ${selectedCountry.digits} digits for ${selectedCountry.name}`);
       return;
     }
-    setSubmitted(true);
+
+    setLoading(true);
+
+    try {
+      await submitLead({
+        name,
+        email,
+        phone: phone ? `${selectedCountry.code} ${phone}` : '',
+        company,
+        service: selectedService,
+        budget: selectedBudget,
+        timeline: selectedTimeline,
+        message: projectDetails,
+        form_type: 'estimate_modal',
+      });
+    } catch (err) {
+      console.error('Estimate submission error:', err);
+    } finally {
+      setLoading(false);
+      setSubmitted(true);
+    }
   };
 
   const handleReset = () => {
@@ -432,9 +455,10 @@ export default function EstimateModal({ isOpen, onClose }) {
               {/* Submit CTA Button */}
               <button
                 type="submit"
-                className="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[48px]"
+                disabled={loading}
+                className="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer min-h-[48px] disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <span>Submit Proposal Request</span>
+                <span>{loading ? 'Submitting Proposal Request...' : 'Submit Proposal Request'}</span>
                 <Send className="w-4 h-4" />
               </button>
             </form>

@@ -21,6 +21,7 @@ import {
   Cpu,
   UserPlus
 } from 'lucide-react';
+import { submitLead } from '../services/leadService';
 import { COUNTRY_CODES } from '../data/countryCodes';
 import './RequestProposalPage.css';
 
@@ -121,14 +122,36 @@ export default function RequestProposalPage({ onNavigateHome }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!phone || phone.length !== selectedCountry.digits) {
       setPhoneError(`${selectedCountry.digits}-digit number required`);
       return;
     }
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    setLoading(true);
+
+    try {
+      await submitLead({
+        name,
+        email,
+        company,
+        phone: `${selectedCountry.code} ${phone}`,
+        service: selectedServices.join(', '),
+        budget: selectedBudget,
+        timeline: selectedTimeline,
+        message: helpDetails,
+        form_type: 'proposal_request',
+      });
+    } catch (err) {
+      console.error('Proposal submit error:', err);
+    } finally {
+      setLoading(false);
+      setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleReset = () => {
@@ -356,9 +379,7 @@ export default function RequestProposalPage({ onNavigateHome }) {
                     <p className="form-career-notice">
                       *To apply for a job, visit the{' '}
                       <a
-                        href="https://www.creatah.com/career.php"
-                        target="_blank"
-                        rel="noopener noreferrer"
+                        href="/careers"
                         className="form-career-link"
                       >
                         career page.
@@ -610,8 +631,8 @@ export default function RequestProposalPage({ onNavigateHome }) {
                   </div>
 
                   {/* 8. Submit Proposal Button */}
-                  <button type="submit" className="submit-proposal-btn">
-                    <span>Submit Proposal</span>
+                  <button type="submit" disabled={loading} className="submit-proposal-btn" style={loading ? { opacity: 0.6, cursor: 'not-allowed' } : {}}>
+                    <span>{loading ? 'Submitting Proposal...' : 'Submit Proposal'}</span>
                     <Send className="w-4 h-4" />
                   </button>
 

@@ -1,10 +1,16 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { getSeoForUrl, buildMetaTagsHtml } from './src/data/seoData.js';
+import { loadEnv } from 'vite';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const toAbsolute = (p) => path.resolve(__dirname, p);
+
+// Load production environment variables
+const env = loadEnv('production', __dirname, '');
+Object.assign(process.env, env);
+
+const { getSeoForUrl, buildMetaTagsHtml } = await import('./src/data/seoData.js');
 
 const template = fs.readFileSync(toAbsolute('dist/index.html'), 'utf-8');
 const { render } = await import('./dist-ssr/entry-server.js');

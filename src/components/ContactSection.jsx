@@ -13,6 +13,7 @@ import {
   Send,
   Info,
 } from 'lucide-react';
+import { submitLead } from '../services/leadService';
 
 export default function ContactSection() {
   const [selectedCountry, setSelectedCountry] = useState(COUNTRY_CODES[0]); // India +91
@@ -28,6 +29,7 @@ export default function ContactSection() {
   
   const [phoneError, setPhoneError] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const filteredCountries = COUNTRY_CODES.filter(
     (c) =>
@@ -61,13 +63,29 @@ export default function ContactSection() {
     setAttachedFile(null);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (phone.length !== selectedCountry.digits) {
       setPhoneError(`Please enter a valid ${selectedCountry.digits}-digit phone number`);
       return;
     }
-    setSubmitted(true);
+
+    setLoading(true);
+
+    try {
+      await submitLead({
+        name,
+        email,
+        phone: `${selectedCountry.code} ${phone}`,
+        message,
+        form_type: 'contact_form',
+      });
+    } catch (err) {
+      console.error('Lead submission error:', err);
+    } finally {
+      setLoading(false);
+      setSubmitted(true);
+    }
   };
 
   return (
@@ -365,9 +383,10 @@ export default function ContactSection() {
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 min-h-[48px]"
+                    disabled={loading}
+                    className="w-full py-3.5 sm:py-4 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-extrabold text-sm sm:text-base shadow-xl shadow-blue-600/30 hover:shadow-blue-600/50 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 min-h-[48px] disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <span>Connect With a Project Expert</span>
+                    <span>{loading ? 'Submitting Inquiry...' : 'Connect With a Project Expert'}</span>
                     <Send className="w-4 h-4" />
                   </button>
 

@@ -24,6 +24,7 @@ import {
   User,
   Zap,
 } from 'lucide-react';
+import { submitLead } from '../services/leadService';
 import { COUNTRY_CODES } from '../data/countryCodes';
 
 const SERVICES_OPTIONS = [
@@ -102,14 +103,34 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
     }
   };
 
-  const handleSubmit = (e) => {
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!phone || phone.length !== selectedCountry.digits) {
       setPhoneError(`${selectedCountry.digits}-digit number required`);
       return;
     }
-    setSubmitted(true);
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    setLoading(true);
+
+    try {
+      await submitLead({
+        name,
+        email,
+        company,
+        phone: `${selectedCountry.code} ${phone}`,
+        service: selectedService,
+        message,
+        form_type: 'contact_us_page',
+      });
+    } catch (err) {
+      console.error('Contact form submission error:', err);
+    } finally {
+      setLoading(false);
+      setSubmitted(true);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleReset = () => {
@@ -567,9 +588,10 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
                   {/* Submit Button */}
                   <button
                     type="submit"
-                    className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:via-indigo-500 hover:to-blue-600 text-white font-bold text-sm sm:text-base shadow-xl shadow-blue-600/25 hover:shadow-blue-600/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2.5 cursor-pointer min-h-[50px]"
+                    disabled={loading}
+                    className="w-full py-4 rounded-xl bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:via-indigo-500 hover:to-blue-600 text-white font-bold text-sm sm:text-base shadow-xl shadow-blue-600/25 hover:shadow-blue-600/40 hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2.5 cursor-pointer min-h-[50px] disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    <span>Send Inquiry & Get Recommendations</span>
+                    <span>{loading ? 'Submitting Inquiry...' : 'Send Inquiry & Get Recommendations'}</span>
                     <Send className="w-4 h-4" />
                   </button>
 

@@ -28,6 +28,7 @@ import {
   Building2,
   Calendar,
 } from 'lucide-react';
+import { submitApplication } from '../services/leadService';
 import { COUNTRY_CODES } from '../data/countryCodes';
 
 const OPEN_ROLES = [
@@ -283,7 +284,7 @@ export default function CareersPage({ onNavigateHome, onNavigateToProposal }) {
     }
   };
 
-  const handleSubmitApplication = (e) => {
+  const handleSubmitApplication = async (e) => {
     e.preventDefault();
     if (phone.length !== selectedCountry.digits) {
       setPhoneError(`Must be exactly ${selectedCountry.digits} digits`);
@@ -291,10 +292,22 @@ export default function CareersPage({ onNavigateHome, onNavigateToProposal }) {
     }
 
     setIsSubmitting(true);
-    setTimeout(() => {
+
+    try {
+      await submitApplication({
+        job_title: selectedRoleForForm || 'General Application',
+        applicant_name: fullName,
+        applicant_email: email,
+        applicant_phone: `${selectedCountry.code} ${phone}`,
+        portfolio_url: portfolioUrl,
+        cover_note: coverNote,
+      });
+    } catch (err) {
+      console.error('Job application submit error:', err);
+    } finally {
       setIsSubmitting(false);
       setSubmitted(true);
-    }, 1200);
+    }
   };
 
   const handleResetForm = () => {
