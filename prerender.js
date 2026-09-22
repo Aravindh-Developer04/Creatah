@@ -2,6 +2,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { loadEnv } from 'vite';
+import prettier from 'prettier';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const toAbsolute = (p) => path.resolve(__dirname, p);
@@ -48,11 +49,24 @@ for (const route of routesToPrerender) {
     `<!-- SEO_META_START -->\n${metaTagsHtml}\n    <!-- SEO_META_END -->`
   );
 
+  // Format with Prettier for clean, human-readable, indented HTML structure on Ctrl+U
+  let formattedHtml = html;
+  try {
+    formattedHtml = await prettier.format(html, {
+      parser: 'html',
+      printWidth: 120,
+      tabWidth: 2,
+      useTabs: false,
+    });
+  } catch (err) {
+    formattedHtml = html;
+  }
+
   const filePath = toAbsolute(route.file);
   fs.mkdirSync(path.dirname(filePath), { recursive: true });
-  fs.writeFileSync(filePath, html, 'utf-8');
-  console.log('Pre-rendered: ' + route.url + ' -> ' + route.file + ' (' + (html.length / 1024).toFixed(1) + ' KB)');
+  fs.writeFileSync(filePath, formattedHtml, 'utf-8');
+  console.log('Pre-rendered: ' + route.url + ' -> ' + route.file + ' (' + (formattedHtml.length / 1024).toFixed(1) + ' KB)');
 }
 
 fs.rmSync(toAbsolute('dist-ssr'), { recursive: true, force: true });
-console.log('Prerendering completed successfully!');
+console.log('Prerendering with full clean HTML structure completed successfully!');
