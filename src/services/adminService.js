@@ -122,6 +122,18 @@ export function clearAuth() {
   localStorage.removeItem(USER_STORAGE_KEY);
 }
 
+function extractErrorString(err, fallback = 'An unexpected error occurred.') {
+  if (!err) return fallback;
+  if (typeof err === 'string') return err;
+  if (typeof err.message === 'string') return err.message;
+  if (typeof err.error === 'string') return err.error;
+  try {
+    return JSON.stringify(err);
+  } catch (e) {
+    return String(err);
+  }
+}
+
 /**
  * Admin Login via Encrypted Token API
  */
@@ -139,7 +151,7 @@ export async function loginAdmin(username, password, remember = false) {
     const data = await safeJson(response);
 
     if (!response.ok || !data.success) {
-      throw new Error(data.message || data.error || 'Authentication failed. Please check credentials.');
+      throw new Error(extractErrorString(data.message || data.error, 'Authentication failed. Please check credentials.'));
     }
 
     storeAuth(data.token, data.admin || username, remember);
@@ -152,7 +164,7 @@ export async function loginAdmin(username, password, remember = false) {
   } catch (error) {
     return {
       success: false,
-      error: error.message || 'Could not connect to authentication server.',
+      error: extractErrorString(error, 'Could not connect to authentication server.'),
     };
   }
 }
@@ -205,7 +217,7 @@ export async function fetchAdminLeads(token, tab = 'leads', search = '') {
 
     const data = await safeJson(response);
     if (!response.ok || !data.success) {
-      throw new Error(data.message || data.error || 'Failed to fetch admin records.');
+      throw new Error(extractErrorString(data.message || data.error, 'Failed to fetch admin records.'));
     }
 
     return {
@@ -218,7 +230,7 @@ export async function fetchAdminLeads(token, tab = 'leads', search = '') {
   } catch (error) {
     return {
       success: false,
-      error: error.message || 'Error communicating with leads API.',
+      error: extractErrorString(error, 'Error communicating with leads API.'),
     };
   }
 }
