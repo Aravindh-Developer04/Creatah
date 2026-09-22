@@ -57,10 +57,19 @@ export const SEO_DATA = {
     ogType: "website",
     ogImage: "https://www.creatah.com/logo.webp",
   },
+  "/admin": {
+    title: "Admin Portal & Secure Control Center | Creatah",
+    description: "Creatah Software Technologies Administrator Access Control Portal.",
+    keywords: "creatah admin, portal",
+    canonical: "https://www.creatah.com/admin",
+    ogType: "website",
+    ogImage: "https://www.creatah.com/logo.webp",
+  },
 };
 
 export function getSeoForUrl(url = "/") {
   const clean = url.split("?")[0].split("#")[0].toLowerCase();
+  if (clean.includes("admin")) return SEO_DATA["/admin"];
   if (clean.includes("about")) return SEO_DATA["/about-us"];
   if (clean.includes("career")) return SEO_DATA["/careers"];
   if (clean.includes("industr")) return SEO_DATA["/industries"];

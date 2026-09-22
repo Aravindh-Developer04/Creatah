@@ -23,6 +23,7 @@ const routesToPrerender = [
   { url: '/process', file: 'dist/process/index.html' },
   { url: '/contact-us', file: 'dist/contact-us/index.html' },
   { url: '/request-a-proposal', file: 'dist/request-a-proposal/index.html' },
+  { url: '/admin', file: 'dist/admin/index.html' },
 ];
 
 for (const route of routesToPrerender) {
