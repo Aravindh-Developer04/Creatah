@@ -5,20 +5,27 @@
 
 export const getCandidateBaseUrls = () => {
   const configured = import.meta.env?.VITE_API_BASE_URL?.trim().replace(/\/$/, '');
-  const list = [];
+  const rawList = [];
   
   if (configured) {
-    let url = configured;
-    if (!url.startsWith('http://') && !url.startsWith('https://')) {
-      url = `https://${url}`;
-    }
-    list.push(url);
+    rawList.push(configured);
   }
 
-  // Local candidates (direct Apache & Vite dev proxy)
-  list.push('api.companyonline.in/api');
-  list.push('/creatah-api');
-  list.push('/api');
+  // Live production server
+  rawList.push('https://api.companyonline.in/api');
+
+  // Local fallback candidates (direct Apache & Vite dev proxy)
+  rawList.push('http://localhost/creatah-api');
+  rawList.push('/creatah-api');
+  rawList.push('/api');
+
+  const list = rawList.map((item) => {
+    let url = item.trim().replace(/\/$/, '');
+    if (!url.startsWith('http://') && !url.startsWith('https://') && !url.startsWith('/')) {
+      url = `https://${url}`;
+    }
+    return url;
+  });
 
   return [...new Set(list)];
 };
