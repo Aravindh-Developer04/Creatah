@@ -88,9 +88,11 @@ export default function EstimateModal({ isOpen, onClose }) {
   };
 
   const [loading, setLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrorMessage('');
     if (phone && phone.length !== selectedCountry.digits) {
       setPhoneError(`Enter ${selectedCountry.digits} digits for ${selectedCountry.name}`);
       return;
@@ -99,7 +101,7 @@ export default function EstimateModal({ isOpen, onClose }) {
     setLoading(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         name,
         email,
         phone: phone ? `${selectedCountry.code} ${phone}` : '',
@@ -110,11 +112,17 @@ export default function EstimateModal({ isOpen, onClose }) {
         message: projectDetails,
         form_type: 'estimate_modal',
       });
+
+      if (res && res.success) {
+        setSubmitted(true);
+      } else {
+        setErrorMessage(res?.error || 'Failed to submit estimate. Please verify the information entered.');
+      }
     } catch (err) {
       console.error('Estimate submission error:', err);
+      setErrorMessage(err?.message || 'Could not connect to server. Please try again.');
     } finally {
       setLoading(false);
-      setSubmitted(true);
     }
   };
 
@@ -451,6 +459,14 @@ export default function EstimateModal({ isOpen, onClose }) {
                   <span>Direct reply within 24 business hours</span>
                 </div>
               </div>
+
+              {/* Error Message Display */}
+              {errorMessage && (
+                <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+                  <X className="w-4 h-4 shrink-0 text-rose-500" />
+                  <span>{errorMessage}</span>
+                </div>
+              )}
 
               {/* Submit CTA Button */}
               <button

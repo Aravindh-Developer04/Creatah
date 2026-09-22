@@ -6,16 +6,24 @@
     RewriteEngine On
 
     # 1. Direct rewrites when placed inside the /api/ folder
+    RewriteRule ^auth/?$ auth.php [L,QSA]
+    RewriteRule ^leads/?$ leads.php [L,QSA]
     RewriteRule ^contact/?$ contact.php [L,QSA]
     RewriteRule ^careers/?$ careers.php [L,QSA]
     RewriteRule ^users/?$ users.php [L,QSA]
-    RewriteRule ^view-leads/?$ view-leads.php [L,QSA]
 
-    # 2. Direct rewrites if placed in the domain root (above /api/)
+    # 2. Direct rewrites if placed in the domain root (above /api/ or /creatah-api/)
+    RewriteRule ^api/auth/?$ api/auth.php [L,QSA]
+    RewriteRule ^api/leads/?$ api/leads.php [L,QSA]
     RewriteRule ^api/contact/?$ api/contact.php [L,QSA]
     RewriteRule ^api/careers/?$ api/careers.php [L,QSA]
     RewriteRule ^api/users/?$ api/users.php [L,QSA]
-    RewriteRule ^api/view-leads/?$ api/view-leads.php [L,QSA]
+
+    RewriteRule ^creatah-api/auth/?$ creatah-api/auth.php [L,QSA]
+    RewriteRule ^creatah-api/leads/?$ creatah-api/leads.php [L,QSA]
+    RewriteRule ^creatah-api/contact/?$ creatah-api/contact.php [L,QSA]
+    RewriteRule ^creatah-api/careers/?$ creatah-api/careers.php [L,QSA]
+    RewriteRule ^creatah-api/users/?$ creatah-api/users.php [L,QSA]
 
     # 3. Serve existing physical files directly
     RewriteCond %{REQUEST_FILENAME} -f
@@ -28,11 +36,14 @@
 </IfModule>
 
 # Fallback router for any missing route
-ErrorDocument 404 /api/index.php
+ErrorDocument 404 index.php
 
-# Enable CORS Headers for React Frontend, Vercel & Postman
+# Enable CORS Headers for React Frontend, Vercel & Postman (Prevent duplicate headers)
 <IfModule mod_headers.c>
-    Header always set Access-Control-Allow-Origin "*"
-    Header always set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
-    Header always set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
+    Header unset Access-Control-Allow-Origin
+    Header set Access-Control-Allow-Origin "*"
+    Header unset Access-Control-Allow-Methods
+    Header set Access-Control-Allow-Methods "GET, POST, OPTIONS, PUT, DELETE"
+    Header unset Access-Control-Allow-Headers
+    Header set Access-Control-Allow-Headers "Content-Type, Authorization, X-Requested-With, Accept"
 </IfModule>

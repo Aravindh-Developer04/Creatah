@@ -32,8 +32,13 @@ if (preg_match('#/(?:api/)?users/?$#', $uri)) {
     exit;
 }
 
-if (preg_match('#/(?:api/)?view-leads/?$#', $uri)) {
-    require_once __DIR__ . '/view-leads.php';
+if (preg_match('#/(?:api/)?auth/?$#', $uri)) {
+    require_once __DIR__ . '/auth.php';
+    exit;
+}
+
+if (preg_match('#/(?:api/)?leads/?$#', $uri)) {
+    require_once __DIR__ . '/leads.php';
     exit;
 }
 
@@ -45,8 +50,9 @@ echo json_encode([
     'endpoints' => [
         'contact' => '/api/contact',
         'careers' => '/api/careers',
-        'users' => '/api/users',
-        'view_leads' => '/api/view-leads'
+        'users'   => '/api/users',
+        'auth'    => '/api/auth',
+        'leads'   => '/api/leads'
     ],
     'timestamp' => date('Y-m-d H:i:s')
 ], JSON_PRETTY_PRINT);

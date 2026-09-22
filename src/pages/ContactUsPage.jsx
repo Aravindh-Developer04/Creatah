@@ -71,6 +71,7 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
   const [message, setMessage] = useState('');
   const [attachedFile, setAttachedFile] = useState(null);
   const [phoneError, setPhoneError] = useState('');
+  const [formError, setFormError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [openFaq, setOpenFaq] = useState(0);
   const fileInputRef = useRef(null);
@@ -107,6 +108,7 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError('');
     if (!phone || phone.length !== selectedCountry.digits) {
       setPhoneError(`${selectedCountry.digits}-digit number required`);
       return;
@@ -115,7 +117,7 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
     setLoading(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         name,
         email,
         company,
@@ -124,12 +126,18 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
         message,
         form_type: 'contact_us_page',
       });
+
+      if (res && res.success) {
+        setSubmitted(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setFormError(res?.error || 'Failed to submit inquiry. Please check your information.');
+      }
     } catch (err) {
       console.error('Contact form submission error:', err);
+      setFormError(err?.message || 'Could not connect to database API server. Please try again.');
     } finally {
       setLoading(false);
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -143,6 +151,7 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
     setMessage('');
     setAttachedFile(null);
     setPhoneError('');
+    setFormError('');
   };
 
   return (
@@ -584,6 +593,14 @@ export default function ContactUsPage({ onNavigateHome, onNavigateToProposal }) 
                     <Lock className="w-4 h-4 text-emerald-600 shrink-0" />
                     <span>*Your idea is 100% protected by our mutual non-disclosure agreement.</span>
                   </div>
+
+                  {/* Error Alert Display */}
+                  {formError && (
+                    <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+                      <X className="w-4 h-4 shrink-0 text-rose-500" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
 
                   {/* Submit Button */}
                   <button

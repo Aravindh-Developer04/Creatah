@@ -19,11 +19,13 @@ import IndustriesPage from './pages/IndustriesPage';
 import CareersPage from './pages/CareersPage';
 import ProcessPage from './pages/ProcessPage';
 import ContactUsPage from './pages/ContactUsPage';
+import AdminDashboardPage from './pages/AdminDashboardPage';
 import { getSeoForUrl } from './data/seoData';
 
 function getRouteFromLocation(url) {
   if (url) {
     const cleanUrl = url.toLowerCase();
+    if (cleanUrl.includes('admin')) return 'admin';
     if (cleanUrl.includes('about')) return 'about';
     if (cleanUrl.includes('career')) return 'careers';
     if (cleanUrl.includes('industr')) return 'industries';
@@ -36,6 +38,7 @@ function getRouteFromLocation(url) {
   const path = window.location.pathname.toLowerCase();
   const hash = window.location.hash.toLowerCase();
 
+  if (path.includes('admin') || hash.includes('admin')) return 'admin';
   if (path.includes('about') || hash.includes('about')) return 'about';
   if (path.includes('career') || hash.includes('career')) return 'careers';
   if (path.includes('industr') || hash.includes('industr')) return 'industries';
@@ -55,6 +58,8 @@ function getRouteFromLocation(url) {
 
 function getPathForPage(page) {
   switch (page) {
+    case 'admin':
+      return '/admin';
     case 'about':
       return '/about-us';
     case 'careers':
@@ -187,17 +192,23 @@ export default function App({ initialUrl }) {
         isDarkPage ? 'bg-[#0e0d17] text-white' : 'bg-white text-slate-900'
       }`}
     >
-      {/* Global Header with Active Route States */}
-      <Header
-        currentPage={currentPage}
-        onNavigatePage={navigateToPage}
-        onNavigateHome={() => navigateToPage('home')}
-        onNavigateToProposal={() => navigateToPage('proposal')}
-        onOpenEstimate={() => navigateToPage('proposal')}
-      />
+      {/* Global Header with Active Route States (Hidden on Admin Portal) */}
+      {currentPage !== 'admin' && (
+        <Header
+          currentPage={currentPage}
+          onNavigatePage={navigateToPage}
+          onNavigateHome={() => navigateToPage('home')}
+          onNavigateToProposal={() => navigateToPage('proposal')}
+          onOpenEstimate={() => navigateToPage('proposal')}
+        />
+      )}
 
       {/* Main Page Dynamic Content */}
       <main className="flex-grow">
+        {currentPage === 'admin' && (
+          <AdminDashboardPage />
+        )}
+
         {currentPage === 'about' && (
           <AboutUsPage
             onNavigateHome={() => navigateToPage('home')}
@@ -281,8 +292,10 @@ export default function App({ initialUrl }) {
         )}
       </main>
 
-      {/* Global Footer */}
-      <Footer onNavigatePage={navigateToPage} />
+      {/* Global Footer (Hidden on Admin Portal) */}
+      {currentPage !== 'admin' && (
+        <Footer onNavigatePage={navigateToPage} />
+      )}
 
       {/* Estimator Modal fallback */}
       <EstimateModal

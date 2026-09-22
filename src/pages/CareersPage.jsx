@@ -238,6 +238,7 @@ export default function CareersPage({ onNavigateHome, onNavigateToProposal }) {
   const [phoneError, setPhoneError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [formError, setFormError] = useState('');
   const [openFaq, setOpenFaq] = useState(0);
 
   const fileInputRef = useRef(null);
@@ -286,6 +287,7 @@ export default function CareersPage({ onNavigateHome, onNavigateToProposal }) {
 
   const handleSubmitApplication = async (e) => {
     e.preventDefault();
+    setFormError('');
     if (phone.length !== selectedCountry.digits) {
       setPhoneError(`Must be exactly ${selectedCountry.digits} digits`);
       return;
@@ -294,19 +296,26 @@ export default function CareersPage({ onNavigateHome, onNavigateToProposal }) {
     setIsSubmitting(true);
 
     try {
-      await submitApplication({
+      const res = await submitApplication({
         job_title: selectedRoleForForm || 'General Application',
         applicant_name: fullName,
         applicant_email: email,
         applicant_phone: `${selectedCountry.code} ${phone}`,
+        experience_years: experience,
         portfolio_url: portfolioUrl,
         cover_note: coverNote,
       });
+
+      if (res && res.success) {
+        setSubmitted(true);
+      } else {
+        setFormError(res?.error || 'Failed to submit application. Please check your information.');
+      }
     } catch (err) {
       console.error('Job application submit error:', err);
+      setFormError(err?.message || 'Could not connect to server. Please try again.');
     } finally {
       setIsSubmitting(false);
-      setSubmitted(true);
     }
   };
 
@@ -916,7 +925,13 @@ export default function CareersPage({ onNavigateHome, onNavigateToProposal }) {
                 </div>
 
                 {/* Submit Action */}
-                <div className="pt-3">
+                <div className="pt-3 space-y-3">
+                  {formError && (
+                    <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2">
+                      <X className="w-4 h-4 shrink-0 text-rose-500" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
                   <button
                     type="submit"
                     disabled={isSubmitting}

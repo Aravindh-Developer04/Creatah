@@ -59,6 +59,23 @@ const STEPS = [
   },
 ];
 
+const BUDGET_RANGES = [
+  '₹2 Lakhs – ₹5 Lakhs',
+  '₹5 Lakhs – ₹15 Lakhs',
+  '₹15 Lakhs – ₹30 Lakhs',
+  '₹30 Lakhs – ₹50 Lakhs',
+  '₹50+ Lakhs (Enterprise)',
+  'Flexible / Discussion',
+];
+
+const TIMELINE_RANGES = [
+  '< 1 Month (Fast-Track)',
+  '1 – 3 Months',
+  '3 – 6 Months',
+  '6+ Months',
+  'Flexible / Planning',
+];
+
 export default function RequestProposalPage({ onNavigateHome }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -68,9 +85,12 @@ export default function RequestProposalPage({ onNavigateHome }) {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [countrySearch, setCountrySearch] = useState('');
   const [selectedServices, setSelectedServices] = useState(['Android App Development']);
+  const [selectedBudget, setSelectedBudget] = useState(BUDGET_RANGES[1]);
+  const [selectedTimeline, setSelectedTimeline] = useState(TIMELINE_RANGES[1]);
   const [helpDetails, setHelpDetails] = useState('');
   const [attachedFile, setAttachedFile] = useState(null);
   const [phoneError, setPhoneError] = useState('');
+  const [formError, setFormError] = useState('');
   const [isDragging, setIsDragging] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const fileInputRef = useRef(null);
@@ -126,6 +146,7 @@ export default function RequestProposalPage({ onNavigateHome }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError('');
     if (!phone || phone.length !== selectedCountry.digits) {
       setPhoneError(`${selectedCountry.digits}-digit number required`);
       return;
@@ -134,7 +155,7 @@ export default function RequestProposalPage({ onNavigateHome }) {
     setLoading(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         name,
         email,
         company,
@@ -143,14 +164,20 @@ export default function RequestProposalPage({ onNavigateHome }) {
         budget: selectedBudget,
         timeline: selectedTimeline,
         message: helpDetails,
-        form_type: 'proposal_request',
+        form_type: 'estimate_proposal',
       });
+
+      if (res && res.success) {
+        setSubmitted(true);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      } else {
+        setFormError(res?.error || 'Failed to submit proposal request. Please check your information.');
+      }
     } catch (err) {
       console.error('Proposal submit error:', err);
+      setFormError(err?.message || 'Could not connect to database API server. Please try again.');
     } finally {
       setLoading(false);
-      setSubmitted(true);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
@@ -161,9 +188,12 @@ export default function RequestProposalPage({ onNavigateHome }) {
     setCompany('');
     setPhone('');
     setSelectedServices(['Android App Development']);
+    setSelectedBudget(BUDGET_RANGES[1]);
+    setSelectedTimeline(TIMELINE_RANGES[1]);
     setHelpDetails('');
     setAttachedFile(null);
     setPhoneError('');
+    setFormError('');
   };
 
   return (
@@ -327,6 +357,14 @@ export default function RequestProposalPage({ onNavigateHome }) {
                     <div className="summary-row">
                       <span className="summary-label">Phone:</span>
                       <strong className="summary-val-dark">{selectedCountry.code} {phone}</strong>
+                    </div>
+                    <div className="summary-row">
+                      <span className="summary-label">Estimated Budget:</span>
+                      <strong className="summary-val-dark">{selectedBudget}</strong>
+                    </div>
+                    <div className="summary-row">
+                      <span className="summary-label">Target Timeline:</span>
+                      <strong className="summary-val-dark">{selectedTimeline}</strong>
                     </div>
                     <div>
                       <span className="summary-label">Selected Services:</span>
@@ -516,6 +554,41 @@ export default function RequestProposalPage({ onNavigateHome }) {
                     )}
                   </div>
 
+                  {/* Estimated Budget & Target Timeline */}
+                  <div className="form-row-2col">
+                    <div className="form-field-group">
+                      <label className="form-field-label">
+                        Estimated Budget *
+                      </label>
+                      <select
+                        value={selectedBudget}
+                        onChange={(e) => setSelectedBudget(e.target.value)}
+                        className="form-input-text"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {BUDGET_RANGES.map((b) => (
+                          <option key={b} value={b}>{b}</option>
+                        ))}
+                      </select>
+                    </div>
+
+                    <div className="form-field-group">
+                      <label className="form-field-label">
+                        Target Timeline *
+                      </label>
+                      <select
+                        value={selectedTimeline}
+                        onChange={(e) => setSelectedTimeline(e.target.value)}
+                        className="form-input-text"
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {TIMELINE_RANGES.map((t) => (
+                          <option key={t} value={t}>{t}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
                   {/* 4. Choose Services (Multi-select) */}
                   <div className="form-field-group">
                     <div className="services-header-row">
@@ -629,6 +702,14 @@ export default function RequestProposalPage({ onNavigateHome }) {
                       <strong className="nda-text-bold">*Your idea is 100% protected by our non disclosure agreement.</strong> We treat all project briefs and company IP with strict confidentiality.
                     </p>
                   </div>
+
+                  {/* Error Alert Display */}
+                  {formError && (
+                    <div style={{ padding: '0.75rem 1rem', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: '0.75rem', color: '#b91c1c', fontSize: '0.75rem', display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.85rem' }}>
+                      <X className="w-4 h-4" style={{ color: '#ef4444', flexShrink: 0 }} />
+                      <span>{formError}</span>
+                    </div>
+                  )}
 
                   {/* 8. Submit Proposal Button */}
                   <button type="submit" disabled={loading} className="submit-proposal-btn" style={loading ? { opacity: 0.6, cursor: 'not-allowed' } : {}}>

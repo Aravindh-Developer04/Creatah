@@ -28,6 +28,7 @@ export default function ContactSection() {
   const [turnstileChecked, setTurnstileChecked] = useState(true);
   
   const [phoneError, setPhoneError] = useState('');
+  const [formError, setFormError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [loading, setLoading] = useState(false);
 
@@ -65,6 +66,7 @@ export default function ContactSection() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setFormError('');
     if (phone.length !== selectedCountry.digits) {
       setPhoneError(`Please enter a valid ${selectedCountry.digits}-digit phone number`);
       return;
@@ -73,18 +75,24 @@ export default function ContactSection() {
     setLoading(true);
 
     try {
-      await submitLead({
+      const res = await submitLead({
         name,
         email,
         phone: `${selectedCountry.code} ${phone}`,
         message,
         form_type: 'contact_form',
       });
+
+      if (res && res.success) {
+        setSubmitted(true);
+      } else {
+        setFormError(res?.error || 'Failed to submit inquiry. Please check your information.');
+      }
     } catch (err) {
       console.error('Lead submission error:', err);
+      setFormError(err?.message || 'Could not connect to database API server. Please try again.');
     } finally {
       setLoading(false);
-      setSubmitted(true);
     }
   };
 
@@ -379,6 +387,14 @@ export default function ContactSection() {
                       Protected by Cloudflare
                     </span>
                   </div>
+
+                  {/* Error Alert Display */}
+                  {formError && (
+                    <div className="p-3 bg-rose-50 border border-rose-200 rounded-xl text-rose-700 text-xs flex items-center gap-2 mb-3">
+                      <X className="w-4 h-4 shrink-0 text-rose-500" />
+                      <span>{formError}</span>
+                    </div>
+                  )}
 
                   {/* Submit Button */}
                   <button

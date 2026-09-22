@@ -50,5 +50,16 @@ export default defineConfig({
   server: {
     port: 3001,
     open: false,
+    proxy: {
+      '/creatah-api': {
+        target: 'http://localhost',
+        changeOrigin: true,
+      },
+      '/api': {
+        target: 'http://localhost/creatah-api',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, ''),
+      },
+    },
   },
 });
