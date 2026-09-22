@@ -9,6 +9,27 @@ require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 
+// Auto-create leads table if not exists
+try {
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `leads` (
+          `id` INT AUTO_INCREMENT PRIMARY KEY,
+          `form_type` VARCHAR(50) NOT NULL DEFAULT 'contact_form',
+          `name` VARCHAR(150) NOT NULL,
+          `email` VARCHAR(150) NOT NULL,
+          `phone` VARCHAR(50) DEFAULT NULL,
+          `service` VARCHAR(150) DEFAULT NULL,
+          `budget` VARCHAR(100) DEFAULT NULL,
+          `timeline` VARCHAR(100) DEFAULT NULL,
+          `company` VARCHAR(150) DEFAULT NULL,
+          `message` TEXT DEFAULT NULL,
+          `ip_address` VARCHAR(45) DEFAULT NULL,
+          `status` ENUM('new', 'contacted', 'qualified', 'closed') DEFAULT 'new',
+          `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+} catch (Exception $e) {}
+
 // 1. GET Request: Returns leads as JSON
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {

@@ -10,6 +10,21 @@ require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 
+// Auto-create users table if not exists
+try {
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `users` (
+          `id` INT AUTO_INCREMENT PRIMARY KEY,
+          `name` VARCHAR(150) NOT NULL,
+          `email` VARCHAR(150) NOT NULL,
+          `password` VARCHAR(255) NOT NULL,
+          `gender` VARCHAR(50) DEFAULT NULL,
+          `country` VARCHAR(100) DEFAULT NULL,
+          `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+} catch (Exception $e) {}
+
 // 1. GET Request: Returns all users or single user as clean JSON
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     try {

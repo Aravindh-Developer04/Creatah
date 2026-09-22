@@ -9,6 +9,25 @@ require_once __DIR__ . '/config.php';
 
 header('Content-Type: application/json; charset=UTF-8');
 
+// Auto-create job_applications table if not exists
+try {
+    $pdo->exec("
+        CREATE TABLE IF NOT EXISTS `job_applications` (
+          `id` INT AUTO_INCREMENT PRIMARY KEY,
+          `job_title` VARCHAR(150) NOT NULL,
+          `applicant_name` VARCHAR(150) NOT NULL,
+          `applicant_email` VARCHAR(150) NOT NULL,
+          `applicant_phone` VARCHAR(50) NOT NULL,
+          `experience_years` VARCHAR(50) DEFAULT NULL,
+          `portfolio_url` VARCHAR(255) DEFAULT NULL,
+          `linkedin_url` VARCHAR(255) DEFAULT NULL,
+          `cover_note` TEXT DEFAULT NULL,
+          `status` ENUM('submitted', 'reviewed', 'shortlisted', 'rejected') DEFAULT 'submitted',
+          `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+    ");
+} catch (Exception $e) {}
+
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     sendResponse(false, 'Method not allowed. Only POST requests are accepted.', [], 405);
 }
