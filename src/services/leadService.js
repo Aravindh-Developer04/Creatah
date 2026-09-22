@@ -5,6 +5,12 @@
 
 export const getCandidateBaseUrls = () => {
   const configured = import.meta.env?.VITE_API_BASE_URL?.trim().replace(/\/$/, '');
+  const isLocalhost =
+    typeof window !== 'undefined' &&
+    (window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1' ||
+      window.location.hostname === '::1');
+
   const rawList = [];
   
   if (configured) {
@@ -14,10 +20,12 @@ export const getCandidateBaseUrls = () => {
   // Live production server
   rawList.push('https://api.companyonline.in/api');
 
-  // Local fallback candidates (direct Apache & Vite dev proxy)
-  rawList.push('http://localhost/creatah-api');
-  rawList.push('/creatah-api');
-  rawList.push('/api');
+  // Only use local fallback candidates when running on localhost
+  if (isLocalhost) {
+    rawList.push('http://localhost/creatah-api');
+    rawList.push('/creatah-api');
+    rawList.push('/api');
+  }
 
   const list = rawList.map((item) => {
     let url = item.trim().replace(/\/$/, '');
