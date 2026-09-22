@@ -3,6 +3,30 @@
   "trailingSlash": false,
   "rewrites": [
     {
+      "source": "/about-us",
+      "destination": "/about-us/index.html"
+    },
+    {
+      "source": "/careers",
+      "destination": "/careers/index.html"
+    },
+    {
+      "source": "/industries",
+      "destination": "/industries/index.html"
+    },
+    {
+      "source": "/process",
+      "destination": "/process/index.html"
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/contact-us/index.html"
+    },
+    {
+      "source": "/request-a-proposal",
+      "destination": "/request-a-proposal/index.html"
+    },
+    {
       "source": "/admin(.*)",
       "destination": "/admin/index.html"
     },
