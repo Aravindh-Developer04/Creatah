@@ -1,69 +1,69 @@
-export const DEFAULT_SITE_URL = "https://www.creatah.com";
+export const DEFAULT_SITE_URL = "https://creatah-5gw3.vercel.app";
 
 export const SEO_DATA = {
   "/": {
     title: "Custom Software Development Company in Chennai | Creatah",
     description: "Creatah is a premier custom software development company in Chennai specializing in high-performance mobile apps, enterprise web applications, cloud engineering, and dedicated IT staffing.",
     keywords: "custom software development company, software development services, software company chennai, mobile app development chennai, web development company chennai, IT staffing solutions, flutter development chennai, reactjs developers",
-    canonical: "https://www.creatah.com/",
+    canonical: `${DEFAULT_SITE_URL}/`,
     ogType: "website",
-    ogImage: "https://www.creatah.com/logo.webp",
+    ogImage: `${DEFAULT_SITE_URL}/logo.webp`,
   },
   "/about-us": {
     title: "About Us | Creatah Software Technologies | 10+ Years of Engineering Craft",
     description: "Learn about Creatah Software Technologies. 10+ years of software craftsmanship in Chennai, 540+ enterprise projects delivered, and 100% in-house software engineers.",
     keywords: "about creatah, software engineering firm chennai, bespoke software company, IT company velachery, enterprise software development, creatah software technologies",
-    canonical: "https://www.creatah.com/about-us",
+    canonical: `${DEFAULT_SITE_URL}/about-us`,
     ogType: "article",
-    ogImage: "https://www.creatah.com/about-team-3d.jpg",
+    ogImage: `${DEFAULT_SITE_URL}/about-team-3d.jpg`,
   },
   "/careers": {
     title: "Careers at Creatah | Engineering & Design Vacancies in Chennai | We're Hiring",
     description: "Explore open engineering and product roles at Creatah Software Technologies in Chennai. We are actively hiring Flutter developers, React engineers, UI/UX designers, and full stack architects.",
     keywords: "creatah careers, software jobs chennai, flutter developer jobs chennai, react developer vacancies, tech jobs velachery chennai, frontend hiring chennai",
-    canonical: "https://www.creatah.com/careers",
+    canonical: `${DEFAULT_SITE_URL}/careers`,
     ogType: "website",
-    ogImage: "https://www.creatah.com/career-hero-3d.jpg",
+    ogImage: `${DEFAULT_SITE_URL}/career-hero-3d.jpg`,
   },
   "/industries": {
     title: "Industry Verticals We Serve | Domain Expertise Across 18+ Sectors | Creatah",
     description: "Bespoke digital platforms tailored for 18+ core industry domains: Healthcare, Fintech, Logistics, Retail, Real Estate, Automotive, Education, and Manufacturing.",
     keywords: "healthcare software development, fintech application development, logistics supply chain software, custom ecommerce solutions, real estate erp chennai",
-    canonical: "https://www.creatah.com/industries",
+    canonical: `${DEFAULT_SITE_URL}/industries`,
     ogType: "website",
-    ogImage: "https://www.creatah.com/industries-ecosystem-3d.jpg",
+    ogImage: `${DEFAULT_SITE_URL}/industries-ecosystem-3d.jpg`,
   },
   "/process": {
     title: "Our 5-Step Engineering Process | Agile Software Development Lifecycle | Creatah",
     description: "Discover Creatah's proven 5-step engineering methodology: Deep Discovery, UI/UX Prototyping, Agile Development, Rigorous QA Testing, and CI/CD Cloud Deployment.",
     keywords: "software development process, agile sdlc methodology, software testing chennai, devops deployment pipeline, cloud architecture process",
-    canonical: "https://www.creatah.com/process",
+    canonical: `${DEFAULT_SITE_URL}/process`,
     ogType: "website",
-    ogImage: "https://www.creatah.com/process-flow-3d.jpg",
+    ogImage: `${DEFAULT_SITE_URL}/process-flow-3d.jpg`,
   },
   "/contact-us": {
     title: "Contact Us | Technical Support & Project Consultations in Chennai | Creatah",
     description: "Connect directly with Creatah Software Technologies solution architects in Chennai. Fast 15-minute average response time for project discovery, quotes, and technology advisory.",
     keywords: "contact creatah, hire developers chennai, software development quotation, IT consulting chennai, creatah contact number email",
-    canonical: "https://www.creatah.com/contact-us",
+    canonical: `${DEFAULT_SITE_URL}/contact-us`,
     ogType: "website",
-    ogImage: "https://www.creatah.com/support-illustration.png",
+    ogImage: `${DEFAULT_SITE_URL}/support-illustration.png`,
   },
   "/request-a-proposal": {
     title: "Request a Free Project Proposal & Cost Estimate | Creatah",
     description: "Submit your project details for a comprehensive technical roadmap, architecture proposal, and transparent timeline estimate within 24 hours from Creatah experts.",
     keywords: "request software proposal, project cost estimate, app development quotation, software development proposal chennai",
-    canonical: "https://www.creatah.com/request-a-proposal",
+    canonical: `${DEFAULT_SITE_URL}/request-a-proposal`,
     ogType: "website",
-    ogImage: "https://www.creatah.com/logo.webp",
+    ogImage: `${DEFAULT_SITE_URL}/logo.webp`,
   },
   "/admin": {
     title: "Admin Portal & Secure Control Center | Creatah",
     description: "Creatah Software Technologies Administrator Access Control Portal.",
     keywords: "creatah admin, portal",
-    canonical: "https://www.creatah.com/admin",
+    canonical: `${DEFAULT_SITE_URL}/admin`,
     ogType: "website",
-    ogImage: "https://www.creatah.com/logo.webp",
+    ogImage: `${DEFAULT_SITE_URL}/logo.webp`,
   },
 };
 
@@ -84,10 +84,10 @@ export function generateSchemaJsonLd(seo) {
     {
       "@context": "https://schema.org",
       "@type": "Organization",
-      "@id": "https://www.creatah.com/#organization",
+      "@id": `${DEFAULT_SITE_URL}/#organization`,
       name: "Creatah Software Technologies",
-      url: "https://www.creatah.com",
-      logo: "https://www.creatah.com/logo.webp",
+      url: DEFAULT_SITE_URL,
+      logo: `${DEFAULT_SITE_URL}/logo.webp`,
       description: "Leading custom software development company based in Chennai, India, delivering bespoke web, mobile, and cloud software solutions.",
       telephone: "+918838229241",
       email: "info@creatah.com",
@@ -109,10 +109,10 @@ export function generateSchemaJsonLd(seo) {
     {
       "@context": "https://schema.org",
       "@type": "LocalBusiness",
-      "@id": "https://www.creatah.com/#localbusiness",
+      "@id": `${DEFAULT_SITE_URL}/#localbusiness`,
       name: "Creatah Software Technologies",
-      image: "https://www.creatah.com/logo.webp",
-      url: "https://www.creatah.com",
+      image: `${DEFAULT_SITE_URL}/logo.webp`,
+      url: DEFAULT_SITE_URL,
       telephone: "+918838229241",
       priceRange: "$$ - $$$$",
       address: {
@@ -140,12 +140,12 @@ export function generateSchemaJsonLd(seo) {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
-      "@id": "https://www.creatah.com/#website",
-      url: "https://www.creatah.com",
+      "@id": `${DEFAULT_SITE_URL}/#website`,
+      url: DEFAULT_SITE_URL,
       name: "Creatah Software Technologies",
       description: seo.description,
       publisher: {
-        "@id": "https://www.creatah.com/#organization"
+        "@id": `${DEFAULT_SITE_URL}/#organization`
       }
     }
   ];
@@ -161,7 +161,7 @@ export function buildMetaTagsHtml(seo) {
     <link rel="canonical" href="${seo.canonical}" />
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <meta name="author" content="Creatah Software Technologies" />
-    <meta name="publisher" content="https://www.creatah.com" />
+    <meta name="publisher" content="${DEFAULT_SITE_URL}" />
     <meta name="theme-color" content="#080c18" />
 
     <!-- Geo Location Meta Tags (Chennai, Tamil Nadu, India) -->
