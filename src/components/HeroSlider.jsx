@@ -36,37 +36,38 @@ const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds auto-slide
 
 export default function HeroSlider({ onOpenEstimate }) {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
   const timerRef = useRef(null);
 
-  // Auto slide effect
-  useEffect(() => {
-    if (isHovered) {
-      if (timerRef.current) clearInterval(timerRef.current);
-      return;
-    }
-
+  const resetTimer = () => {
+    if (timerRef.current) clearInterval(timerRef.current);
     timerRef.current = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
     }, AUTO_SLIDE_INTERVAL);
+  };
 
+  // Auto slide effect
+  useEffect(() => {
+    resetTimer();
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isHovered, currentSlide]);
+  }, []);
 
   const nextSlide = () => {
     setCurrentSlide((prev) => (prev + 1) % SLIDES.length);
+    resetTimer();
   };
 
   const prevSlide = () => {
     setCurrentSlide((prev) => (prev - 1 + SLIDES.length) % SLIDES.length);
+    resetTimer();
   };
 
   const goToSlide = (index) => {
     setCurrentSlide(index);
+    resetTimer();
   };
 
   // Touch swipe support for mobile/tablet
@@ -95,8 +96,6 @@ export default function HeroSlider({ onOpenEstimate }) {
   return (
     <section
       className="relative min-h-[100dvh] pt-24 sm:pt-32 lg:pt-36 pb-24 sm:pb-28 lg:pb-32 flex items-center bg-[#0e0d17] text-white overflow-hidden select-none"
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
       onTouchStart={onTouchStart}
       onTouchMove={onTouchMove}
       onTouchEnd={onTouchEnd}
@@ -108,7 +107,7 @@ export default function HeroSlider({ onOpenEstimate }) {
           <div
             key={s.id}
             className={`absolute inset-0 transition-opacity duration-700 ease-in-out pointer-events-none ${
-              isActive ? 'opacity-100 z-0' : 'opacity-0 -z-10'
+              isActive ? 'opacity-100 z-[1]' : 'opacity-0 z-0'
             }`}
             style={{
               backgroundImage: `url(${s.image})`,
@@ -125,7 +124,10 @@ export default function HeroSlider({ onOpenEstimate }) {
 
       {/* Main Slide Content - Balanced wide layout aligned with left margin */}
       <div className="max-w-[1440px] 2xl:max-w-[1536px] mx-auto px-4 xs:px-6 sm:px-10 lg:px-14 xl:px-16 relative z-10 w-full">
-        <div className="w-full lg:w-3/5 xl:w-[58%] max-w-2xl xl:max-w-3xl space-y-4 sm:space-y-6">
+        <div
+          key={currentSlide}
+          className="w-full lg:w-3/5 xl:w-[58%] max-w-2xl xl:max-w-3xl space-y-4 sm:space-y-6 animate-fadeIn"
+        >
           
           {/* Pill Badge */}
           <div className="inline-flex items-center gap-2 px-3 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-blue-500/10 border border-blue-400/30 text-cyan-300 text-[11px] sm:text-xs md:text-sm font-bold uppercase tracking-wider shadow-sm">
