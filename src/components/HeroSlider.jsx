@@ -32,7 +32,7 @@ const SLIDES = [
   },
 ];
 
-const AUTO_SLIDE_INTERVAL = 6000; // 6 seconds auto-slide matching creatah.com
+const AUTO_SLIDE_INTERVAL = 4000; // 4 seconds auto-slide
 
 export default function HeroSlider({ onOpenEstimate }) {
   const [currentSlide, setCurrentSlide] = useState(0);
