@@ -170,25 +170,25 @@ export const TECH_STACK = [
 
 export const TESTIMONIALS = [
   {
-    author: 'Naveen Raj',
+    author: 'Venkatesh',
     company: 'Diagnostic Centre, Chennai',
     quote: 'Creatah delivered our patient portal in 14 weeks, on schedule and within budget. What surprised us most was how quickly they got up to speed on our compliance requirements; we barely had to explain the healthcare context.',
     rating: 5,
   },
   {
-    author: 'Suresh Kumar',
+    author: 'Aravindh',
     company: 'Logistics Company, South India',
     quote: 'We’d been burned by two agencies before we found Creatah. They pushed back on bad ideas (including some of mine), flagged problems early, and delivered exactly what was scoped. The app has a 4.7 rating on the App Store now.',
     rating: 5,
   },
   {
-    author: 'Nisha',
+    author: 'Poornima',
     company: 'Retail Brand, Chennai',
     quote: 'Organic traffic is up 340% since Creatah rebuilt our website and took over SEO. The team doesn’t just report numbers; they explain what’s happening and why. That transparency is rare in this industry.',
     rating: 5,
   },
   {
-    author: 'Hemavathy',
+    author: 'Prabu Pushparaj',
     company: 'Logistics & Supply Chain Company, Tamil Nadu',
     quote: 'We needed a mobile app that worked on every Android device our field team uses, not just flagship phones. Creatah tested on real hardware, optimized for low-RAM devices, and delivered something our team actually uses every day without crashes.',
     rating: 5,
