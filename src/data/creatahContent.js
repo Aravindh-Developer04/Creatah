@@ -188,7 +188,7 @@ export const TESTIMONIALS = [
     rating: 5,
   },
   {
-    author: 'Prabu Pushparaj',
+    author: 'Prabu',
     company: 'Logistics & Supply Chain Company, Tamil Nadu',
     quote: 'We needed a mobile app that worked on every Android device our field team uses, not just flagship phones. Creatah tested on real hardware, optimized for low-RAM devices, and delivered something our team actually uses every day without crashes.',
     rating: 5,
